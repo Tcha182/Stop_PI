@@ -16,7 +16,7 @@ import zipfile
 import tempfile
 import copy
 
-st.set_page_config(page_title="Stop Passenger Information Generator", page_icon=":busstop:")
+st.set_page_config(page_title="Timetable Generator", page_icon=":busstop:")
 
 def load_feed(file):
     with tempfile.NamedTemporaryFile(delete=False) as tmp:
