@@ -16,6 +16,8 @@ import zipfile
 import tempfile
 import copy
 
+st.set_page_config(page_title="Stop Passenger Information Generator", page_icon=":busstop:")
+
 def load_feed(file):
     with tempfile.NamedTemporaryFile(delete=False) as tmp:
         tmp.write(file.getvalue())
@@ -273,7 +275,7 @@ def create_zip_file(doc_files):
             z.writestr(doc_file, buffer.getvalue())
     return zip_buffer
 
-st.title("GTFS Route Timetable Viewer")
+st.title("GTFS Route Timetable Generator")
 
 gtfs_file = st.file_uploader("Upload GTFS zip file", type="zip")
 template_file = st.file_uploader("Upload Word template", type="docx")
