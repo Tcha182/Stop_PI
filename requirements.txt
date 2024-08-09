@@ -1,4 +1,6 @@
 streamlit
 pandas
 gtfs_kit
+python-docx
+openpyxl
 docxtpl
