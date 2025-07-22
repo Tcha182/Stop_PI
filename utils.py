@@ -126,10 +126,10 @@ def organize_times_by_hour(times, headsign_indices=None):
         new_columns[col] = hour_str
 
     timetable.rename(columns=new_columns, inplace=True)
-    timetable.fillna('', inplace=True)
+    timetable = timetable.fillna('').infer_objects(copy=False)
     
     headsign_index_table.rename(columns=new_columns, inplace=True)
-    headsign_index_table.fillna('', inplace=True)
+    headsign_index_table = headsign_index_table.fillna('').infer_objects(copy=False)
 
     return timetable, headsign_index_table
 

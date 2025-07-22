@@ -4,6 +4,9 @@ import streamlit as st
 import os
 import re
 from utils import group_dates_by_timetables, organize_times_by_hour
+
+# Configure pandas to use future behavior for downcasting warnings
+pd.set_option('future.no_silent_downcasting', True)
 from docxtpl import DocxTemplate
 from docx import Document
 from docx.shared import Pt, RGBColor, Cm
@@ -63,9 +66,12 @@ def index_headsigns(timetable):
     headsign_index_dict = {}
     headsign_counts = timetable.groupby(['stop_id', 'trip_headsign']).size().reset_index(name='count')
     headsign_counts['headsign_index'] = headsign_counts.groupby('stop_id')['count'].rank("dense", ascending=False).astype(int)
-    headsign_index_dict = headsign_counts.groupby('stop_id').apply(
-        lambda x: dict(zip(x['headsign_index'], x['trip_headsign']))
-    ).to_dict()
+    
+    # Create headsign_index_dict without using groupby().apply()
+    for stop_id in headsign_counts['stop_id'].unique():
+        stop_data = headsign_counts[headsign_counts['stop_id'] == stop_id]
+        headsign_index_dict[stop_id] = dict(zip(stop_data['headsign_index'], stop_data['trip_headsign']))
+    
     headsign_index_map = headsign_counts.set_index(['stop_id', 'trip_headsign'])['headsign_index']
     timetable['headsign_index'] = timetable.set_index(['stop_id', 'trip_headsign']).index.map(headsign_index_map)
     return headsign_index_dict
